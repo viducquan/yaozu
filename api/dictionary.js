@@ -6,6 +6,13 @@ app.use(cors());
 
 // Giả lập cơ sở dữ liệu từ điển
 const dictionary = {
+    "a": {
+    meaning: "hehe",
+    pronunciation: "ahh",
+    partOfSpeech: "123",
+    nom: "丅",
+    examples: ["四六淨六!", "六𱎸𱎸."]
+  },
     "xin chào": {
     meaning: "Lời chào hỏi",
     pronunciation: "xin-chào",
