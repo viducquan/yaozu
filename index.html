@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Từ điển tiếng Việt</title>
+</head>
+<body>
+  <h1>Từ điển tiếng Việt</h1>
+  <input type="text" id="search" placeholder="Nhập từ cần tra" />
+  <button onclick="searchWord()">Tra cứu</button>
+  <div id="result"></div>
+
+  <script>
+    async function searchWord() {
+      const word = document.getElementById('search').value;
+      if (!word) return;
+
+      const response = await fetch(`/api/dictionary?word=${encodeURIComponent(word)}`);
+      const resultDiv = document.getElementById('result');
+
+      if (response.ok) {
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <p><strong>${data.word}</strong>: ${data.meaning.meaning}</p>
+          <p><strong>Phát âm:</strong> ${data.meaning.pronunciation}</p>
+          <p><strong>Từ loại:</strong> ${data.meaning.partOfSpeech}</p>
+          <p><strong>Chữ Nôm:</strong> ${data.meaning.nom}</p>
+          <p><strong>Ví dụ:</strong></p>
+          <ul>
+            ${data.meaning.examples.map(e => `<li>${e}</li>`).join('')}
+          </ul>
+        `;
+      } else {
+        resultDiv.innerHTML = `<p>Không tìm thấy từ.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
