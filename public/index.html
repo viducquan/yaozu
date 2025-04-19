@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ điển tiếng Việt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Từ điển tiếng Việt</h1>
+    <input type="text" id="search" placeholder="Nhập từ cần tra" />
+    <button onclick="searchWord()">Tra cứu</button>
+    <div id="result"></div>
+
+    <script>
+        async function searchWord() {
+            const word = document.getElementById('search').value;
+            if (!word) return;
+
+            // Gửi yêu cầu đến backend API để tìm từ
+            const response = await fetch(`/api/dictionary?word=${word}`);
+
+            const data = await response.json();
+
+            // Kiểm tra dữ liệu trong console
+            console.log(data);
+
+            // Hiển thị kết quả
+            if (data) {
+                document.getElementById('result').innerHTML = `
+                    <p><strong>${data.word}</strong>: ${data.meaning.meaning}</p>
+                    <p><strong>Phát âm:</strong> ${data.meaning.pronunciation}</p>
+                    <p><strong>Từ loại:</strong> ${data.meaning.partOfSpeech}</p>
+                    <p><strong>Chữ Nôm:</strong> ${data.meaning.nom}</p>
+                    <p><strong>Ví dụ:</strong></p>
+                    <ul>
+                        ${data.meaning.examples.map(example => `<li>${example}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                document.getElementById('result').innerHTML = `<p>Không tìm thấy từ.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
